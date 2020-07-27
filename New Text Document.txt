@@ -1,0 +1,47 @@
+The Guide
+
+About The Application
+    This application is an e-commerce system for a products such as  House, Land and Rental Products .
+    It consist of two sides, that is administrator and customer. 
+Requirements :
+    1.	Laptop/ Desktop 
+    2.	Windows operating system 
+    3.	Internet Connection
+    4.	Chrome Browser (can download here and install  https://www.google.com/chrome/)
+    5.	node (can download here and install   https://nodejs.org/en/ )
+    6.	git (can download here and install  https://git-scm.com/) 
+
+
+How to Run Application 
+    •	Step 1 : Clone the following repositories 
+        1.	https://github.com/CalebOkyereSch/HemightServer.git 
+        2.	https://github.com/CalebOkyereSch/ClientAdmin.git 
+        3.	https://github.com/CalebOkyereSch/ClientUser.git 
+    •	Step 2 : In the HemightServer folder, you will find two other folders  ClientAdmin and ClientUser 
+    •	Step 3 : Copy and Paste everything in the ClientAdmin folder you cloned in that of the HemightServer
+    •	Step 4 : Copy and Paste everything in the ClientUser folder you cloned in that of the HemightServer
+    •	Step 5 : Open HemightServer folder in your terminal and run the command “npm install ”
+    •	Step 6 : (do this only if you have done Step 3 )In your terminal navigate to the ClientAdmin folder in HemightServer  and run the command “npm install”
+    •	Step 7 : (do this only if you have done Step 4 ) In your terminal navigate to the ClientUser directory in HemightServer directory  and run the command “npm install”
+    •	Step 8 : In your terminal navigate back to the HemightServer directory and run this command “npm run dev”
+    •	NB: The server for admin and customer is running on 8080 and 5050 respectively and the ClientAdmin and ClientUser is running on port 3000 and 3030 repectively.
+    The database is remote hence there is the need for strong internet connection. 
+
+
+
+
+How Application Works 
+
+    Customer Side … Port 3030
+    As a customer you can only view product, access the home page and products available. 
+    As a signin customer, you have all privileges of a customer that is : 
+        1. View Properties 
+        2. Access all pages including Customer's Cart page 
+        3.Add item to cart 
+        4.Express interest for a particular property even though the system doesn’t support or manage any transactions… it give a registered user the privilege to show interest in a particular property 
+
+    Administrator Side… Port 3000 
+    An administrator can only access any privilege when signed in. 
+    As a signed in administrator, you can add other administrators or remove an administrator. 
+    You can also add or remove products that are displayed on page and view people interest on particular property. 
+    The administrator is able to view all products available too.  
