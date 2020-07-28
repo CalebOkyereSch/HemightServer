@@ -39,7 +39,7 @@ app.use("/api/admi", admi);
 const db = require("./config/keys").mongoURI;
 
 // Connecting to database
-
+q;
 mongoose
   .connect(db, {
     dbName: "HemightPropertiesDB",
@@ -47,11 +47,4 @@ mongoose
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("Mongo connection error", err));
 
-//Home routes
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
-// const PORT = process.env.PORT || 5050;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 module.exports = app;

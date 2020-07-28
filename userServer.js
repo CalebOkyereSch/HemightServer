@@ -36,7 +36,6 @@ app.get("/assets", async (req, res) => {
 // routes
 app.use("/api/users", users);
 app.use("/api/products", products);
-// app.use("/api/admi", admi);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === "production") {

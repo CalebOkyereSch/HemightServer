@@ -4,6 +4,7 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const Admi = require("../../models/Admi");
 const Product = require("../../models/Product");
+const User = require("../../models/User");
 const key = require("../../config/keys");
 const validateAdmiLoginInput = require("../../validation/admiLogin");
 const validateAdmiInput = require("../../validation/admi");
@@ -47,19 +48,27 @@ router.post("/signup", (req, res) => {
   }
 });
 
-// @route   GEt api/admi/signin
-// @desc    Admi signin
+// @route   GEt api/admi/customers
+// @desc    GET customers
 // @access  Public
 
-router.get("/signin", (req, res) => {
-  res.send("login");
-});
+router.get(
+  "/customers",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.find({})
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => res.send(err));
+  }
+);
 
 // Admi signin
 router.post("/signin", (req, res) => {
   const { errors, isValid } = validateAdmiLoginInput(req.body);
   if (!isValid) {
-    res.json(errors);
+    res.status(400).json(errors);
   }
   const username = req.body.username;
   const password = req.body.password;
@@ -71,7 +80,6 @@ router.post("/signin", (req, res) => {
     } else {
       bcrypt.compare(password, admi.password).then((isMatch) => {
         if (isMatch) {
-          // res.status(200).json({ msg: "Successful" });
           const payload = {
             id: admi.id,
             username: admi.username,
@@ -144,6 +152,22 @@ router.delete(
   }
 );
 
+// @route   GET api/admi/others
+// @desc    get all admi
+// @access  Private
+
+router.get(
+  "/others",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Admi.find({})
+      .then((admi) => {
+        res.json(admi);
+      })
+      .catch((err) => res.send(err));
+  }
+);
+
 // @route   Post api/admi/product/add_item
 // @desc    add new item
 // @access  Private
@@ -158,6 +182,7 @@ router.post(
   (req, res) => {
     //so sey we go fit barb the array of file paths for here, then we just go save to
     //db
+    console.log(req.body);
     let newProduct = {};
     if (req.body.type) newProduct.type = req.body.type;
     if (req.body.status) newProduct.status = req.body.status;

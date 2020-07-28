@@ -59,10 +59,6 @@ router.post("/signup", (req, res) => {
   }
 });
 
-router.get("/signin", (req, res) => {
-  res.send("login");
-});
-
 // @route   POST api/users/signin
 // @desc    log in user
 // @access  Public tested
@@ -136,7 +132,7 @@ router.get(
 // @desc    buy item in cart and add item to admi cart
 // @access  Public tested
 
-router.get(
+router.post(
   "/cart/item/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
