@@ -29,7 +29,6 @@ const uploadFile = async ({ file }) => {
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.files);
     if (!req.files.main)
       return res
         .status(422)

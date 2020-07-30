@@ -348,7 +348,26 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     AdmiCart.find({})
-      .then((order) => res.json(order))
+      .then((order) => {
+        let allOrder = [];
+        let ord = {};
+        if (order) {
+          for (let i = 0; i < order.length; i++) {
+            Product.findById(order[i].product).then((product) => {
+              User.findById(order.customer).then((user) => {
+                ord = {
+                  customer: user,
+                  product: product,
+                };
+                // allOrder.push(ord);
+                // console.log(ord);
+              });
+            });
+          }
+        }
+
+        // console.log(order);
+      })
       .catch((err) => console.log(err));
   }
 );

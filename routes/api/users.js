@@ -121,8 +121,6 @@ router.get(
           item.push(product);
         }
         res.json(item);
-      } else {
-        res.json({ msg: "Cart is Empty" });
       }
     });
   }
@@ -130,7 +128,7 @@ router.get(
 
 // @route   GET api/users/cart/:id
 // @desc    buy item in cart and add item to admi cart
-// @access  Public tested
+// @access  Private
 
 router.post(
   "/cart/item/:id",
