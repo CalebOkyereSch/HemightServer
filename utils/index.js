@@ -32,11 +32,11 @@ module.exports = async (req, res, next) => {
     if (!req.files.main)
       return res
         .status(422)
-        .json({ ok: false, error: "Main image is required" });
+        .json({ ok: false, main: "Main image is required" });
     if (!req.files.image)
       return res
         .status(422)
-        .json({ ok: false, error: "Other images are required" }); // later you give your own appropriate error messages
+        .json({ ok: false, other: "Other images are required" }); // later you give your own appropriate error messages
     //first create variable to hole the path, this variable go be reg.body so sey y we go fit
     //call am in the other function, the one you dey take save for db
     req.body.main = await uploadFile({ file: req.files.main[0] });

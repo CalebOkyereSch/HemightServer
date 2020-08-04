@@ -10,6 +10,8 @@ const key = require("../../config/keys");
 const validateLoginInput = require("../../validation/login");
 const validateRegisterInput = require("../../validation/register");
 const router = express.Router();
+const isEmpty = require("../../validation/isEmpty");
+const propertySearch = require("../../validation/propertySearch");
 
 // @route   GET api/users/signup
 // @desc    get signup page
@@ -182,5 +184,65 @@ router.delete(
       .catch((err) => res.status(404).json(err));
   }
 );
+
+// @route   POST api/users/search-location
+// @des   search for item
+// @access  Public
+
+router.post("/search-location", (req, res) => {
+  if (isEmpty(req.body.location)) {
+    Product.find()
+      .then((product) => {
+        res.json(product);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    Product.find({ location: req.body.location })
+      .then((product) => {
+        res.json(product);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+});
+
+router.post("/search/all", (req, res) => {
+  // console.log(req.body);
+  const { errors, isValid } = propertySearch(req.body);
+  if (!isValid) {
+    res.status(400).json(errors);
+  } else {
+    Product.find({
+      type: req.body.type,
+      location: req.body.location,
+      bed: req.body.bed,
+      bath: req.body.bath,
+      rooms: req.body.rooms,
+      status: req.body.status,
+    })
+      .then((product) => {
+        if (product) {
+          let prod = [];
+          for (let i = 0; i < product.length; i++) {
+            if (
+              product[i].price >= req.body.minPrice &&
+              product[i].price <= req.body.maxPrice
+            ) {
+              prod.push(product[i]);
+            }
+          }
+          res.json(prod);
+        } else {
+          res.json([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+});
 
 module.exports = router;

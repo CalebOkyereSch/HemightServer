@@ -15,6 +15,7 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 const fs = require("fs");
 const uploadPhotos = require("../../utils");
+const isEmpty = require("../../validation/isEmpty");
 
 // @route  Post api/admi/signup
 // @desc    Allow admi to register ... this will be removed
@@ -221,7 +222,7 @@ router.post(
   }
 );
 
-// @route   Post api/admi/user/update/
+// @route   Post api/admi/user/update/id
 // @desc    update user
 // @access  Private
 
@@ -229,62 +230,65 @@ router.post(
   "/user/update/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { errors, isValid } = validateRegisterInput(req.body);
-    if (!isValid) {
-      res.status(400).json(errors);
-    } else {
-      const avatar = gravatar.url(req.body.email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
-      const newUser = {
-        name: req.body.name,
-        email: req.body.email,
-        avatar,
-        password: req.body.password,
-      };
+    const newUser = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    if (!isEmpty(req.body.password)) {
+      newUser.password = req.body.password;
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
-          User.findOneAndUpdate({ email: req.body.email }, { $set: newUser })
+          User.findOneAndUpdate({ _id: req.params.id }, { $set: newUser })
             .then((user) => res.json(user))
-
             .catch((err) => console.log(err));
         });
       });
+    } else {
+      User.findOneAndUpdate({ _id: req.params.id }, { $set: newUser })
+        .then((user) => res.json(user))
+        .catch((err) => res.json(err));
     }
   }
 );
 
-// @route   Post api/admi/others/update
+// @route   Post api/admi/update
 // @desc    update admi
 // @access  Private
 
 router.post(
-  "/user/update/:id",
+  "/update/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { errors, isValid } = validateRegisterInput(req.body);
-    if (!isValid) {
-      res.status(400).json(errors);
-    } else {
-      const newUser = {
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password,
-      };
+    const newUser = {
+      name: req.body.name,
+      username: req.body.username,
+    };
+
+    if (!isEmpty(req.body.password)) {
+      newUser.password = req.body.password;
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
-          Admi.findOneAndUpdate(
-            { username: req.body.username },
-            { $set: newUser }
-          ).catch((err) => console.log(err));
+          Admi.findOneAndUpdate({ _id: req.params.id }, { $set: newUser })
+            .then((admi) => {
+              res.json(admi);
+            })
+            .catch((err) => res.json(err));
         });
       });
+    } else {
+      const newUser = {
+        name: req.body.name,
+        username: req.body.username,
+      };
+      Admi.findOneAndUpdate({ _id: req.params.id }, { $set: newUser })
+        .then((admi) => {
+          res.json(admi);
+        })
+        .catch((err) => res.json(err));
     }
   }
 );

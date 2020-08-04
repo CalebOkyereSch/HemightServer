@@ -52,18 +52,5 @@ router.post(
     });
   }
 );
-// @route   POST api/user/search-location
-// @des   search for item
-// @access  Public
-
-router.post("/search-location", (req, res) => {
-  Product.find({ location: req.body.location })
-    .then((product) => {
-      res.json(product);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
 module.exports = router;
